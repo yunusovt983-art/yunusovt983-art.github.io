@@ -127,34 +127,41 @@
   .city svg { width: 100%; height: 100%; display: block; }
 
   /* ─── Секции ─── */
-  main { position: relative; z-index: 2; padding-bottom: 24px; }
+  main { position: relative; z-index: 2; padding-bottom: 64px; }
   section { scroll-margin-top: 90px; }
   h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase;
        font-size: clamp(24px, 3.8vw, 40px); letter-spacing: .04em; color: var(--ink);
        margin: 0 0 22px; }
   h2 .h2-red { color: var(--red); }
 
-  /* ─── Квадратики ─── */
-  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-  a.card { position: relative; aspect-ratio: 1 / 1; display: flex; flex-direction: column;
-           background: var(--cream); border: 3px solid var(--ink); border-radius: 4px;
-           padding: 20px 22px; text-decoration: none; color: var(--ink); overflow: hidden;
-           box-shadow: 9px 9px 0 rgba(28,18,6,.85);
-           transition: transform .15s ease, box-shadow .15s ease; }
-  a.card:hover, a.card:focus-visible { transform: translate(-4px, -4px);
-           box-shadow: 14px 14px 0 var(--red); outline: none; }
-  .card .num { position: absolute; top: 8px; right: 14px; font-family: var(--display);
-               font-weight: 800; font-size: 56px; line-height: 1; color: var(--honey);
-               -webkit-text-stroke: 2px var(--ink); user-select: none; }
-  .card .name { font-family: var(--mono); font-weight: 700; font-size: 15px;
-                color: var(--red); margin: 0 64px 10px 0; word-break: break-word; }
-  .card .desc { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft);
-                display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical;
-                overflow: hidden; }
-  .card .cta { margin-top: auto; padding-top: 10px; font-family: var(--mono);
-               font-size: 12px; font-weight: 700; letter-spacing: .06em;
-               text-transform: uppercase; color: var(--ink); }
-  a.card:hover .cta { color: var(--red); }
+  /* ─── Квадратики-соты: избранные атласы, 2×3 ─── */
+  .hex-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px 22px; }
+  a.hex-card { position: relative; display: block; aspect-ratio: 1 / 1.1547;
+               text-decoration: none; color: var(--ink); }
+  .hex-shadow, .hex-top, .hex-fill { --hx: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+  .hex-shadow { position: absolute; inset: 0; clip-path: var(--hx); background: rgba(28,18,6,.85);
+                transform: translate(9px, 9px); transition: transform .15s ease, background .15s ease; }
+  .hex-top { position: absolute; inset: 0; clip-path: var(--hx); background: var(--ink);
+             transition: transform .15s ease; }
+  .hex-fill { position: absolute; inset: 3px; clip-path: var(--hx); background: var(--cream);
+              display: flex; flex-direction: column; align-items: center; justify-content: center;
+              text-align: center; padding: 16% 15%; overflow: hidden; }
+  a.hex-card:hover .hex-top, a.hex-card:focus-visible .hex-top { transform: translate(-4px, -4px); }
+  a.hex-card:hover .hex-shadow, a.hex-card:focus-visible .hex-shadow {
+    transform: translate(14px, 14px); background: var(--red); }
+  a.hex-card:focus-visible .hex-top { outline: 2px solid var(--red); outline-offset: 2px; }
+  .hex-card .num { font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.4vw, 42px);
+                   line-height: 1; color: var(--honey); -webkit-text-stroke: 2px var(--ink);
+                   user-select: none; margin-bottom: 6px; }
+  .hex-card .name { font-family: var(--mono); font-weight: 700; font-size: 13.5px;
+                     color: var(--red); margin: 0 0 8px; word-break: break-word; }
+  .hex-card .desc { font-size: 12px; line-height: 1.42; color: var(--ink-soft);
+                     display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+                     overflow: hidden; margin-bottom: 8px; }
+  .hex-card .cta { font-family: var(--mono); font-size: 11px; font-weight: 700;
+                    letter-spacing: .06em; text-transform: uppercase; color: var(--ink);
+                    transition: color .15s ease; }
+  a.hex-card:hover .cta { color: var(--red); }
 
   /* ─── Соты ─── */
   .hive-sec { padding: 56px 0 8px; }
@@ -184,10 +191,7 @@
                display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
                overflow: hidden; }
 
-  /* ─── Автор + футер ─── */
-  .author { text-align: center; padding: 64px 24px 34px; scroll-margin-top: 90px; }
-  .author .name { font-family: var(--display); font-weight: 800; text-transform: uppercase;
-                  font-size: clamp(22px, 3.6vw, 36px); letter-spacing: .14em; color: var(--red-dark); }
+  /* ─── Футер ─── */
   footer { background: var(--ink); color: #E9DCB4; font-family: var(--mono); font-size: 13px; }
   footer .wrap { display: flex; justify-content: space-between; align-items: center;
                  gap: 16px; flex-wrap: wrap; padding-top: 18px; padding-bottom: 18px; }
@@ -195,7 +199,7 @@
   footer a:hover { color: #FFFFFF; }
 
   @media (max-width: 880px) {
-    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .hex-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 18px; }
     .nav-links { display: none; }
     .hive-comb { --s: 178px; }
   }
@@ -211,9 +215,8 @@
     .cta-pill { padding: 11px 16px; font-size: 12px; }
   }
   @media (max-width: 520px) {
-    .grid { grid-template-columns: 1fr; }
-    a.card { aspect-ratio: auto; min-height: 190px; }
-    .card .desc { -webkit-line-clamp: 5; }
+    .hex-grid { grid-template-columns: 1fr; max-width: 300px; margin: 0 auto; gap: 28px; }
+    .hex-card .desc { -webkit-line-clamp: 5; }
   }
 </style>
 </head>
@@ -227,7 +230,6 @@
   <div class="nav-links">
     <a href="#atlases">Атласы</a>
     <a href="#hive">Соты</a>
-    <a href="#author">Автор</a>
     <a href="https://github.com/yunusovt983-art" target="_blank" rel="noopener">GitHub <span class="ext">↗</span></a>
   </div>
 </nav>
@@ -243,9 +245,7 @@
       <span class="m-cap">ещё пятнадцать атласов — от superpowers до gonka</span>
     </a>
     <a class="m-item m-small" href="https://github.com/yunusovt983-art" target="_blank" rel="noopener">GitHub ↗</a>
-    <a class="m-item m-small" href="#author">Автор</a>
     <div class="menu-foot">
-      <span>Темур Юнусов</span>
       <a href="https://github.com/yunusovt983-art/yunusovt983-art.github.io" target="_blank" rel="noopener">исходник страницы ↗</a>
       <span>HLD · DDD · ANSI</span>
     </div>
@@ -312,42 +312,72 @@
 <main class="wrap">
   <section id="atlases">
     <h2>Избранные <span class="h2-red">атласы</span></h2>
-    <div class="grid">
-      <a class="card" href="/git-diff-interconnect/">
-        <span class="num">01</span>
-        <span class="name">git-diff-interconnect/</span>
-        <span class="desc">Циклон — git как высокоскоростной harness для AI-агентов: пять ограниченных контекстов поверх Interconnect по образцу YDB.</span>
-        <span class="cta">открыть атлас →</span>
+    <div class="hex-grid">
+      <a class="hex-card" href="/git-diff-interconnect/">
+        <span class="hex-shadow"></span>
+        <span class="hex-top">
+          <span class="hex-fill">
+            <span class="num">01</span>
+            <span class="name">git-diff-interconnect/</span>
+            <span class="desc">Циклон — git как высокоскоростной harness для AI-агентов: пять ограниченных контекстов поверх Interconnect по образцу YDB.</span>
+            <span class="cta">открыть атлас →</span>
+          </span>
+        </span>
       </a>
-      <a class="card" href="/entity-diff/">
-        <span class="num">02</span>
-        <span class="name">entity-diff/</span>
-        <span class="desc">SDP (Semantic Diff Protocol) — HLD в ANSI: слои, арки, граф понятий.</span>
-        <span class="cta">открыть атлас →</span>
+      <a class="hex-card" href="/entity-diff/">
+        <span class="hex-shadow"></span>
+        <span class="hex-top">
+          <span class="hex-fill">
+            <span class="num">02</span>
+            <span class="name">entity-diff/</span>
+            <span class="desc">SDP (Semantic Diff Protocol) — HLD в ANSI: слои, арки, граф понятий.</span>
+            <span class="cta">открыть атлас →</span>
+          </span>
+        </span>
       </a>
-      <a class="card" href="/git-diff/">
-        <span class="num">03</span>
-        <span class="name">git-diff/</span>
-        <span class="desc">Форж — GitHub-подобная платформа поверх собственной реализации git на Rust: HLD, 29 крейтов, семь схем в ANSI, границы контекстов.</span>
-        <span class="cta">открыть атлас →</span>
+      <a class="hex-card" href="/git-diff/">
+        <span class="hex-shadow"></span>
+        <span class="hex-top">
+          <span class="hex-fill">
+            <span class="num">03</span>
+            <span class="name">git-diff/</span>
+            <span class="desc">Форж — GitHub-подобная платформа поверх собственной реализации git на Rust: HLD, 29 крейтов, семь схем в ANSI, границы контекстов.</span>
+            <span class="cta">открыть атлас →</span>
+          </span>
+        </span>
       </a>
-      <a class="card" href="/Harmonic/">
-        <span class="num">04</span>
-        <span class="name">Harmonic/</span>
-        <span class="desc">Rust-порт иерархической SSM на candle: три таймскейла и ошибка предсказания вместо attention, пять requirements-first спецификаций, шесть схем C4 L2 в ANSI.</span>
-        <span class="cta">открыть атлас →</span>
+      <a class="hex-card" href="/Harmonic/">
+        <span class="hex-shadow"></span>
+        <span class="hex-top">
+          <span class="hex-fill">
+            <span class="num">04</span>
+            <span class="name">Harmonic/</span>
+            <span class="desc">Rust-порт иерархической SSM на candle: три таймскейла и ошибка предсказания вместо attention, пять requirements-first спецификаций, шесть схем C4 L2 в ANSI.</span>
+            <span class="cta">открыть атлас →</span>
+          </span>
+        </span>
       </a>
-      <a class="card" href="/kan/">
-        <span class="num">05</span>
-        <span class="name">kan/</span>
-        <span class="desc">Сети Колмогорова–Арнольда на чистом Rust по DDD: обучается функция на ребре, а не вес. Пять семейств базиса, батарея Фейнмана, хроника 41 арки.</span>
-        <span class="cta">открыть атлас →</span>
+      <a class="hex-card" href="/kan/">
+        <span class="hex-shadow"></span>
+        <span class="hex-top">
+          <span class="hex-fill">
+            <span class="num">05</span>
+            <span class="name">kan/</span>
+            <span class="desc">Сети Колмогорова–Арнольда на чистом Rust по DDD: обучается функция на ребре, а не вес. Пять семейств базиса, батарея Фейнмана, хроника 41 арки.</span>
+            <span class="cta">открыть атлас →</span>
+          </span>
+        </span>
       </a>
-      <a class="card" href="/kan-pytorch-site/">
-        <span class="num">06</span>
-        <span class="name">kan-pytorch/</span>
-        <span class="desc">KAN на Rust с нуля: обучаемый сплайн на каждом ребре, автоград, Canonical Graph IR за ACL, 12 крейтов и библиотека классических алгоритмов.</span>
-        <span class="cta">открыть атлас →</span>
+      <a class="hex-card" href="/kan-pytorch-site/">
+        <span class="hex-shadow"></span>
+        <span class="hex-top">
+          <span class="hex-fill">
+            <span class="num">06</span>
+            <span class="name">kan-pytorch/</span>
+            <span class="desc">KAN на Rust с нуля: обучаемый сплайн на каждом ребре, автоград, Canonical Graph IR за ACL, 12 крейтов и библиотека классических алгоритмов.</span>
+            <span class="cta">открыть атлас →</span>
+          </span>
+        </span>
       </a>
     </div>
   </section>
@@ -405,10 +435,6 @@
     </div>
   </section>
 </main>
-
-<div class="author" id="author">
-  <div class="name">Темур Юнусов</div>
-</div>
 
 <footer>
   <div class="wrap">
