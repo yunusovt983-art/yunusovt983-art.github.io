@@ -5,140 +5,333 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Архитектурные атласы — Temur Yunusov</title>
 <meta name="description" content="Коллекция архитектурных разборов: HLD, DDD, ANSI-схемы и диаграммы последовательности для открытых и собственных проектов.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐝</text></svg>">
 <style>
   :root {
-    --bg: #F1F4F7; --surface: #FFFFFF; --ink: #1B2733; --muted: #5C6E7E;
-    --line: #C6D2DD; --accent: #D9480F; --flow: #0B7285;
+    --honey: #F5C400;
+    --honey-hi: #FFD41C;
+    --honey-lo: #E4B300;
+    --red: #D6001C;
+    --red-dark: #A80016;
+    --ink: #1C1206;
+    --ink-soft: #4A3A10;
+    --cream: #FFF7DC;
     --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-    --serif: Charter, "Iowan Old Style", Georgia, serif;
+    --display: "Futura", "Avenir Next Condensed", "Avenir Next", "Arial Narrow", "Helvetica Neue", sans-serif;
     --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #101820; --surface: #17222D; --ink: #E2EAF1; --muted: #8DA2B4;
-            --line: #2C3D4D; --accent: #FF8A3D; --flow: #45C0D4; }
-  }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink);
-         font-family: var(--serif); font-size: 17px; line-height: 1.6; }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
-  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .14em;
-             text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
-  h1 { font-family: var(--sans); font-weight: 700; font-size: clamp(30px, 5vw, 46px);
-       line-height: 1.08; margin: 0 0 14px; letter-spacing: -.015em; text-wrap: balance; }
-  .lede { font-size: 18px; max-width: 60ch; color: var(--ink); margin: 0 0 8px;
-          padding-bottom: 28px; border-bottom: 2px solid var(--ink); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-          gap: 14px; margin-top: 36px; }
-  a.card { display: block; background: var(--surface); border: 1px solid var(--line);
-           border-radius: 6px; padding: 18px 20px; text-decoration: none; color: var(--ink); }
-  a.card:hover { border-color: var(--accent); }
-  a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .card .name { font-family: var(--mono); font-size: 13px; font-weight: 600;
-                color: var(--flow); margin-bottom: 8px; }
-  a.card:hover .name { color: var(--accent); }
-  .card .desc { font-size: 15px; line-height: 1.55; color: var(--muted); }
-  footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
-           font-family: var(--mono); font-size: 12px; color: var(--muted); }
-  footer a { color: var(--flow); }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--ink);
+    font-family: var(--sans); font-size: 17px; line-height: 1.55;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.13'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/svg%3E"),
+      radial-gradient(140% 100% at 50% 0%, var(--honey-hi) 0%, var(--honey) 55%, var(--honey-lo) 100%);
+    background-size: 84px 147px, cover;
+    background-attachment: fixed, fixed;
+  }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+  /* ─── Hero (обложка) ─── */
+  .hero { position: relative; overflow: hidden; min-height: clamp(520px, 74vh, 780px);
+          display: flex; align-items: center; }
+  .hero-inner { position: relative; z-index: 2; padding-top: 72px; padding-bottom: 72px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .18em;
+             text-transform: uppercase; color: var(--ink-soft); margin: 0 0 22px; }
+  h1 { font-family: var(--display); font-weight: 800; text-transform: uppercase;
+       font-size: clamp(34px, 10vw, 108px); line-height: .94; letter-spacing: .01em;
+       color: var(--red); margin: 0 0 20px; text-wrap: balance; }
+  .sub { font-family: var(--display); font-weight: 700; text-transform: uppercase;
+         font-size: clamp(17px, 2.6vw, 28px); line-height: 1.25; letter-spacing: .06em;
+         color: #FFFFFF; text-shadow: 0 1px 0 rgba(28,18,6,.22); margin: 0 0 26px; max-width: 15em; }
+  .tags { font-family: var(--mono); font-size: 13px; color: var(--ink); margin: 0;
+          border-top: 3px solid var(--ink); display: inline-block; padding-top: 12px;
+          letter-spacing: .04em; }
+
+  /* ─── Пчёлы ─── */
+  .bees { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+          perspective: 1000px; transform-style: preserve-3d; }
+  .bee { position: absolute; width: 140px; height: 100px; margin: -50px 0 0 -70px;
+         transform-style: preserve-3d; will-change: transform; }
+  .b3d { position: relative; width: 140px; height: 100px; transform-style: preserve-3d;
+         filter: drop-shadow(0 22px 14px rgba(28,18,6,.20)); }
+  .bee svg.body { position: absolute; inset: 0; overflow: visible; }
+  .wing { position: absolute; width: 56px; height: 84px; transform-origin: 50% 96%; }
+  .wing svg { width: 100%; height: 100%; overflow: visible; }
+  .wl { left: 26px; top: -46px; animation: flap 90ms linear infinite alternate; }
+  .wr { left: 44px; top: -44px; opacity: .82; transform: translateZ(-8px);
+        animation: flap 90ms linear 45ms infinite alternate; }
+  @keyframes flap {
+    from { transform: rotateX(72deg) rotateZ(-10deg); }
+    to   { transform: rotateX(8deg)  rotateZ(10deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wl, .wr { animation: none; transform: rotateX(35deg); }
+  }
+
+  /* ─── Квадратики ─── */
+  main { position: relative; z-index: 2; padding-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+  a.card { position: relative; aspect-ratio: 1 / 1; display: flex; flex-direction: column;
+           background: var(--cream); border: 3px solid var(--ink); border-radius: 4px;
+           padding: 20px 22px; text-decoration: none; color: var(--ink); overflow: hidden;
+           box-shadow: 9px 9px 0 rgba(28,18,6,.85);
+           transition: transform .15s ease, box-shadow .15s ease; }
+  a.card:hover, a.card:focus-visible { transform: translate(-4px, -4px);
+           box-shadow: 14px 14px 0 var(--red); outline: none; }
+  .card .num { position: absolute; top: 8px; right: 14px; font-family: var(--display);
+               font-weight: 800; font-size: 56px; line-height: 1; color: var(--honey);
+               -webkit-text-stroke: 2px var(--ink); user-select: none; }
+  .card .name { font-family: var(--mono); font-weight: 700; font-size: 15px;
+                color: var(--red); margin: 0 64px 10px 0; word-break: break-word; }
+  .card .desc { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft);
+                display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical;
+                overflow: hidden; }
+  .card .cta { margin-top: auto; padding-top: 10px; font-family: var(--mono);
+               font-size: 12px; font-weight: 700; letter-spacing: .06em;
+               text-transform: uppercase; color: var(--ink); }
+  a.card:hover .cta { color: var(--red); }
+
+  /* ─── Остальные атласы ─── */
+  .rest { padding: 40px 0 8px; }
+  .rest h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase;
+             font-size: clamp(22px, 3.4vw, 34px); letter-spacing: .04em; color: var(--ink);
+             margin: 0 0 18px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  a.chip { font-family: var(--mono); font-size: 13px; font-weight: 600;
+           background: var(--cream); color: var(--ink); text-decoration: none;
+           border: 2px solid var(--ink); border-radius: 4px; padding: 7px 12px;
+           box-shadow: 4px 4px 0 rgba(28,18,6,.75); transition: transform .12s, box-shadow .12s; }
+  a.chip:hover, a.chip:focus-visible { transform: translate(-2px, -2px);
+           box-shadow: 6px 6px 0 var(--red); color: var(--red); outline: none; }
+
+  /* ─── Автор + футер ─── */
+  .author { text-align: center; padding: 56px 24px 34px; }
+  .author .name { font-family: var(--display); font-weight: 800; text-transform: uppercase;
+                  font-size: clamp(22px, 3.6vw, 36px); letter-spacing: .14em; color: var(--red-dark); }
+  footer { background: var(--ink); color: #E9DCB4; font-family: var(--mono); font-size: 13px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center;
+                 gap: 16px; flex-wrap: wrap; padding-top: 18px; padding-bottom: 18px; }
+  footer a { color: var(--honey); text-decoration: none; }
+  footer a:hover { color: #FFFFFF; }
+  .hexmark { font-size: 16px; }
+
+  @media (max-width: 880px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  }
+  @media (max-width: 560px) {
+    h1 { font-size: clamp(22px, 8.4vw, 44px); }
+  }
+  @media (max-width: 520px) {
+    .grid { grid-template-columns: 1fr; }
+    a.card { aspect-ratio: auto; min-height: 190px; }
+    .card .desc { -webkit-line-clamp: 5; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <p class="eyebrow">yunusovt983-art.github.io</p>
-  <h1>Архитектурные атласы</h1>
-  <p class="lede">Разборы систем — чужих и своих: HLD-схемы (SVG и ANSI), DDD-карты, диаграммы последовательности, инварианты и хроники. Каждый атлас — самодостаточная страница.</p>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="abclip"><ellipse cx="92" cy="54" rx="38" ry="22"/></clipPath>
+    <g id="bee-body">
+      <!-- лапки -->
+      <path d="M44 62 q-10 12 -22 15 M56 66 q-2 14 -12 20 M74 68 q4 13 -1 22 M96 72 q6 10 4 20"
+            fill="none" stroke="#1C1206" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- брюшко -->
+      <ellipse cx="92" cy="54" rx="38" ry="22" fill="#F2A007"/>
+      <g clip-path="url(#abclip)" fill="#1C1206">
+        <rect x="70" y="24" width="11" height="60" transform="rotate(-6 75 54)"/>
+        <rect x="90" y="24" width="11" height="60" transform="rotate(-6 95 54)"/>
+        <rect x="110" y="20" width="26" height="68" transform="rotate(-6 118 54)"/>
+      </g>
+      <ellipse cx="92" cy="54" rx="38" ry="22" fill="none" stroke="#1C1206" stroke-width="3"/>
+      <!-- жало -->
+      <path d="M129 57 L140 60" stroke="#1C1206" stroke-width="3" stroke-linecap="round"/>
+      <!-- грудка -->
+      <ellipse cx="46" cy="50" rx="19" ry="16" fill="#2E1F0C" stroke="#1C1206" stroke-width="3"/>
+      <path d="M34 40 q12 -8 24 0 M32 46 q14 -7 28 0" stroke="#5A431C" stroke-width="2"
+            fill="none" stroke-linecap="round"/>
+      <!-- голова -->
+      <circle cx="21" cy="47" r="12" fill="#1C1206"/>
+      <circle cx="16" cy="43" r="3.6" fill="#C9A44C"/>
+      <!-- усики -->
+      <path d="M14 38 C10 28, 2 24, -3 26 M22 36 C22 25, 30 19, 36 17"
+            fill="none" stroke="#1C1206" stroke-width="2.6" stroke-linecap="round"/>
+    </g>
+  </defs>
+</svg>
+
+<header class="hero">
+  <div class="bees" id="bees" aria-hidden="true">
+    <div class="bee" data-s="1.15" data-spd=".7"  style="left:74%; top:46%">
+      <div class="b3d">
+        <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+      </div>
+    </div>
+    <div class="bee" data-s=".62" data-spd="1"   style="left:48%; top:26%">
+      <div class="b3d">
+        <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+      </div>
+    </div>
+    <div class="bee" data-s=".48" data-spd="1.3" style="left:28%; top:64%">
+      <div class="b3d">
+        <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+      </div>
+    </div>
+    <div class="bee" data-s=".4"  data-spd="1.1" style="left:62%; top:74%">
+      <div class="b3d">
+        <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+      </div>
+    </div>
+    <div class="bee" data-s=".56" data-spd=".9"  style="left:86%; top:22%">
+      <div class="b3d">
+        <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+      </div>
+    </div>
+    <div class="bee" data-s=".34" data-spd="1.5" style="left:14%; top:26%">
+      <div class="b3d">
+        <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-inner wrap">
+    <p class="eyebrow">yunusovt983-art.github.io</p>
+    <h1>Архитектурные<br>атласы</h1>
+    <p class="sub">Искусство разбора программных систем</p>
+    <p class="tags">HLD в ANSI · DDD-карты · секвенции · инварианты · хроники</p>
+  </div>
+</header>
+
+<main class="wrap">
   <div class="grid">
-    <a class="card" href="/superpowers/">
-      <div class="name">superpowers/</div>
-      <div class="desc">Архитектурный атлас obra/superpowers — методология для AI-агентов: HLD, активация, SDD, fix loop, DDD-карта, секвенции и wiki-заметки.</div>
-    </a>
-    <a class="card" href="/hermes/">
-      <div class="name">hermes/</div>
-      <div class="desc">Hermes-RS — High-Level Design порта агента Hermes на Rust: ports &amp; adapters, ANSI-схемы, инварианты и хроника эпиков.</div>
-    </a>
-    <a class="card" href="/git-diff/">
-      <div class="name">git-diff/</div>
-      <div class="desc">Форж — GitHub-подобная платформа поверх собственной реализации git на Rust: HLD, 29 крейтов, семь схем в ANSI, границы контекстов.</div>
-    </a>
-    <a class="card" href="/forge-site/">
-      <div class="name">forge-site/</div>
-      <div class="desc">Forge — прогресс, архитектура и метрики git-платформы на Rust.</div>
+    <a class="card" href="/git-diff-interconnect/">
+      <span class="num">01</span>
+      <span class="name">git-diff-interconnect/</span>
+      <span class="desc">Циклон — git как высокоскоростной harness для AI-агентов: пять ограниченных контекстов поверх Interconnect по образцу YDB.</span>
+      <span class="cta">открыть атлас →</span>
     </a>
     <a class="card" href="/entity-diff/">
-      <div class="name">entity-diff/</div>
-      <div class="desc">SDP (Semantic Diff Protocol) — HLD в ANSI: слои, арки, граф понятий.</div>
+      <span class="num">02</span>
+      <span class="name">entity-diff/</span>
+      <span class="desc">SDP (Semantic Diff Protocol) — HLD в ANSI: слои, арки, граф понятий.</span>
+      <span class="cta">открыть атлас →</span>
     </a>
-    <a class="card" href="/git-diff-interconnect/">
-      <div class="name">git-diff-interconnect/</div>
-      <div class="desc">Циклон — git как высокоскоростной harness для AI-агентов: пять ограниченных контекстов поверх Interconnect по образцу YDB.</div>
-    </a>
-    <a class="card" href="/nebraska/">
-      <div class="name">nebraska/</div>
-      <div class="desc">Nebraska (Flatcar update manager) — архитектурное исследование в терминах DDD: контексты, ядро раскатки и две гипотезы, подтверждённые на стенде.</div>
-    </a>
-    <a class="card" href="/flatcar/">
-      <div class="name">flatcar/</div>
-      <div class="desc">Flatcar Container Linux — заметки и разбор.</div>
-    </a>
-    <a class="card" href="/ai-google-ads/">
-      <div class="name">ai-google-ads/</div>
-      <div class="desc">ads-ai — AI-система управления Google Ads и Meta Ads на Rust: Claude предлагает оптимизации, человек одобряет; approve-гейт, undo, полуавтономный режим, MCC.</div>
-    </a>
-    <a class="card" href="/kan/">
-      <div class="name">kan/</div>
-      <div class="desc">[KAN] Andrey Karpathy 2-brain — сети Колмогорова-Арнольда на чистом Rust по DDD: обучается функция на ребре, а не вес. HLD в ANSI, пять семейств базиса, батарея Фейнмана, второй мозг из 90 заметок, хроника 41 арки.</div>
-    </a>
-    <a class="card" href="/3x-ui/">
-      <div class="name">3x-ui/</div>
-      <div class="desc">3x-ui-panel — control-plane для Xray на Rust: DDD-гексагон из 5 крейтов, HLD в ANSI, второй мозг (MOC, 21 zettel, метод Фейнмана) и хроника 55+ эпиков.</div>
-    </a>
-    <a class="card" href="/zed/hld/">
-      <div class="name">zed/hld/</div>
-      <div class="desc">[ZED] TurboHarness — воркспейс на Rust, где каждый крейт — идея из Zed, переосмысленная с нуля: DDD-карта контекстов, HLD в ANSI (5 диаграмм), реестр 28 крейтов.</div>
+    <a class="card" href="/git-diff/">
+      <span class="num">03</span>
+      <span class="name">git-diff/</span>
+      <span class="desc">Форж — GitHub-подобная платформа поверх собственной реализации git на Rust: HLD, 29 крейтов, семь схем в ANSI, границы контекстов.</span>
+      <span class="cta">открыть атлас →</span>
     </a>
     <a class="card" href="/Harmonic/">
-      <div class="name">Harmonic/</div>
-      <div class="desc">Harmonic — Rust-порт иерархической SSM на candle: три таймскейла и ошибка предсказания вместо attention, плюс пять requirements-first спецификаций вокруг ядра. Шесть схем C4 L2 в ANSI и карта полномочий.</div>
+      <span class="num">04</span>
+      <span class="name">Harmonic/</span>
+      <span class="desc">Rust-порт иерархической SSM на candle: три таймскейла и ошибка предсказания вместо attention, пять requirements-first спецификаций, шесть схем C4 L2 в ANSI.</span>
+      <span class="cta">открыть атлас →</span>
+    </a>
+    <a class="card" href="/kan/">
+      <span class="num">05</span>
+      <span class="name">kan/</span>
+      <span class="desc">Сети Колмогорова–Арнольда на чистом Rust по DDD: обучается функция на ребре, а не вес. Пять семейств базиса, батарея Фейнмана, хроника 41 арки.</span>
+      <span class="cta">открыть атлас →</span>
     </a>
     <a class="card" href="/kan-pytorch-site/">
-      <div class="name">kan-pytorch-site/</div>
-      <div class="desc">[KAN_PyTorch] Andrey Karpathy — Kolmogorov–Arnold Networks на Rust с нуля: обучаемый сплайн на каждом ребре, автоград, Canonical Graph IR за ACL, 12 крейтов и библиотека классических алгоритмов.</div>
-    </a>
-    <a class="card" href="/spintronics/">
-      <div class="name">spintronics/</div>
-      <div class="desc">[Spintronics] Анализ архитектуры — библиотека спиновой динамики на Rust: HLD в ANSI (три уровня C4), карта ограниченных контекстов, model drift на пяти путях ЛЛГ, ошибка ×796 000 в единицах поля и прогон физической верификации.</div>
-    </a>
-    <a class="card" href="/ai-reviewer-gonka/">
-      <div class="name">ai-reviewer-gonka/</div>
-      <div class="desc">[Gonka AI-reviewer] architecture research — ревью как задача оркестрации, а не один большой промпт: HLD в ANSI (5 схем), семистадийный конвейер, границы контекстов DDD, воронка фильтрации как контроль стоимости и второй мозг из 30 заметок.</div>
-    </a>
-    <a class="card" href="/ainl/">
-      <div class="name">ainl/</div>
-      <div class="desc">AINL — граф-канонический AI-native рантайм на Rust (Rust design &amp; DDD refactor): 7 крейтов как ограниченные контексты, HLD в ANSI, петля самопочинки и честный замер KAN-политики.</div>
-    </a>
-    <a class="card" href="/clippy/">
-      <div class="name">clippy/</div>
-      <div class="desc">[Rust-clippy] architecture analysis — archlint: компилятор-плагин на rustc_private, где правило возвращает не текст, а факт для графа знаний. HLD в ANSI (три панно), 9 крейтов DDD, слитый граф воркспейса и межкрейтовая мёртвость pub, триаж шести правил на чужих корпусах, хроника 74 арок.</div>
-    </a>
-    <a class="card" href="/KleinRiemannNetwork/">
-      <div class="name">KleinRiemannNetwork/</div>
-      <div class="desc">[KleinRiemannNetwork] Andrey Karpathy 2-brain — комплекснозначная сеть с обучаемыми рёбрами на Rust с нуля: заряд k в десяти масках, эквивариантность в типе (~1e-15), вирлингер-backprop против конечных разностей. HLD в ANSI (три схемы), 27 модулей, 1 831 Предложение, второй мозг и хроника 413 арок.</div>
-    </a>
-    <a class="card" href="/codex-herd/">
-      <div class="name">codex-herd/</div>
-      <div class="desc">[Codex_Herd] Клонирование herdr в Vendor — DDD-разбор терминального мультиплексора для AI-агентов: семь контекстов в одном крейте, две Anti-Corruption Layer, Specification на TOML-манифестах, snapshot вместо event sourcing и 12 идей, отобранных для переноса.</div>
-    </a>
-    <a class="card" href="/gonka/">
-      <div class="name">gonka/</div>
-      <div class="desc">[Gonka] architecture research — децентрализованный AI-инференс на форке Cosmos SDK, где право голоса даёт доказанная работа GPU, а не застейканные токены. HLD в ANSI (восемь панно), классификация поддоменов, путь одного запроса, devshard-эскроу, EVM-мост на BLS, второй мозг из 31 заметки и состязательная сверка доков против кода.</div>
+      <span class="num">06</span>
+      <span class="name">kan-pytorch/</span>
+      <span class="desc">KAN на Rust с нуля: обучаемый сплайн на каждом ребре, автоград, Canonical Graph IR за ACL, 12 крейтов и библиотека классических алгоритмов.</span>
+      <span class="cta">открыть атлас →</span>
     </a>
   </div>
 
-  <footer>
-    Temur Yunusov · <a href="https://github.com/yunusovt983-art">github.com/yunusovt983-art</a>
-  </footer>
+  <section class="rest">
+    <h2>Остальные атласы</h2>
+    <div class="chips">
+      <a class="chip" href="/superpowers/" title="Методология для AI-агентов: HLD, активация, SDD, fix loop, DDD-карта, wiki">superpowers/</a>
+      <a class="chip" href="/hermes/" title="Hermes-RS — HLD порта агента Hermes на Rust: ports & adapters, инварианты, хроника эпиков">hermes/</a>
+      <a class="chip" href="/forge-site/" title="Forge — прогресс, архитектура и метрики git-платформы на Rust">forge-site/</a>
+      <a class="chip" href="/nebraska/" title="Nebraska (Flatcar update manager) — DDD-исследование: контексты, ядро раскатки, две гипотезы">nebraska/</a>
+      <a class="chip" href="/flatcar/" title="Flatcar Container Linux — заметки и разбор">flatcar/</a>
+      <a class="chip" href="/ai-google-ads/" title="ads-ai — AI-система управления Google Ads и Meta Ads на Rust: approve-гейт, undo, MCC">ai-google-ads/</a>
+      <a class="chip" href="/3x-ui/" title="3x-ui-panel — control-plane для Xray на Rust: DDD-гексагон из 5 крейтов, HLD в ANSI">3x-ui/</a>
+      <a class="chip" href="/zed/hld/" title="TurboHarness — идеи из Zed, переосмысленные с нуля: DDD-карта, HLD в ANSI, 28 крейтов">zed/hld/</a>
+      <a class="chip" href="/spintronics/" title="Библиотека спиновой динамики на Rust: HLD в ANSI, model drift, физическая верификация">spintronics/</a>
+      <a class="chip" href="/ai-reviewer-gonka/" title="Ревью как задача оркестрации: семистадийный конвейер, воронка фильтрации, 30 заметок">ai-reviewer-gonka/</a>
+      <a class="chip" href="/ainl/" title="AINL — граф-канонический AI-native рантайм на Rust: 7 крейтов, петля самопочинки">ainl/</a>
+      <a class="chip" href="/clippy/" title="archlint — компилятор-плагин на rustc_private: правило возвращает факт для графа знаний">clippy/</a>
+      <a class="chip" href="/KleinRiemannNetwork/" title="Комплекснозначная сеть с обучаемыми рёбрами на Rust: вирлингер-backprop, хроника 413 арок">KleinRiemannNetwork/</a>
+      <a class="chip" href="/codex-herd/" title="DDD-разбор терминального мультиплексора для AI-агентов: семь контекстов, две ACL">codex-herd/</a>
+      <a class="chip" href="/gonka/" title="Децентрализованный AI-инференс на форке Cosmos SDK: право голоса даёт работа GPU">gonka/</a>
+    </div>
+  </section>
+</main>
+
+<div class="author">
+  <div class="name">Темур Юнусов</div>
 </div>
+
+<footer>
+  <div class="wrap">
+    <span><span class="hexmark">⬡</span> архитектурные атласы</span>
+    <a href="https://github.com/yunusovt983-art">github.com/yunusovt983-art</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var hero = document.querySelector('.hero');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var bees = [].slice.call(document.querySelectorAll('.bee')).map(function (el, i) {
+    var spd = parseFloat(el.dataset.spd || 1);
+    return {
+      el: el, s: parseFloat(el.dataset.s || 1),
+      ax: 60 + 90 * ((i * 37) % 100) / 100, ay: 36 + 44 * ((i * 53) % 100) / 100,
+      az: 90 + 80 * ((i * 71) % 100) / 100,
+      w1: 0.00030 * spd, w2: 0.00042 * spd, w3: 0.00026 * spd,
+      p1: i * 1.7, p2: i * 2.3, p3: i * 0.9,
+      px: null, py: null, face: 0
+    };
+  });
+
+  if (reduce) {
+    bees.forEach(function (b) {
+      b.el.style.transform = 'rotateY(' + (b.p1 % 2 ? 180 : 0) + 'deg) scale(' + b.s + ')';
+    });
+    return;
+  }
+
+  function frame(t) {
+    for (var i = 0; i < bees.length; i++) {
+      var b = bees[i];
+      var x = Math.sin(t * b.w1 + b.p1) * b.ax + Math.sin(t * b.w1 * 2.7 + b.p2) * b.ax * 0.3;
+      var y = Math.sin(t * b.w2 + b.p2) * b.ay + Math.cos(t * b.w2 * 1.9 + b.p3) * b.ay * 0.25;
+      var z = Math.sin(t * b.w3 + b.p3) * b.az;
+      var dx = b.px === null ? 0 : x - b.px;
+      var dy = b.py === null ? 0 : y - b.py;
+      b.px = x; b.py = y;
+      var target = dx > 0.02 ? 180 : (dx < -0.02 ? 0 : b.face);
+      b.face += (target - b.face) * 0.08;
+      var bank = Math.max(-22, Math.min(22, dy * 7)) * (b.face > 90 ? -1 : 1);
+      b.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + z.toFixed(1) + 'px)' +
+        ' rotateY(' + b.face.toFixed(1) + 'deg) rotateZ(' + bank.toFixed(1) + 'deg) scale(' + b.s + ')';
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
