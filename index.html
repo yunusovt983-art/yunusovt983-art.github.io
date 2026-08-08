@@ -112,12 +112,12 @@
   .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .18em;
              text-transform: uppercase; color: var(--ink-soft); margin: 0 0 22px; }
   h1 { font-family: var(--display); font-weight: 800; text-transform: uppercase;
-       font-size: clamp(34px, 10vw, 108px); line-height: .94; letter-spacing: .01em;
-       color: var(--red); margin: 0 0 20px; text-wrap: balance; }
+       font-size: clamp(26px, 6.4vw, 66px); line-height: .96; letter-spacing: .01em;
+       color: var(--red); margin: 0 0 18px; text-wrap: balance; }
   .sub { font-family: var(--display); font-weight: 700; text-transform: uppercase;
-         font-size: clamp(17px, 2.6vw, 28px); line-height: 1.25; letter-spacing: .06em;
+         font-size: clamp(15px, 2.1vw, 23px); line-height: 1.28; letter-spacing: .05em;
          color: #FFFFFF; text-shadow: 0 1px 0 rgba(28,18,6,.35), 0 2px 12px rgba(28,18,6,.30);
-         margin: 0 0 26px; max-width: 15em; }
+         margin: 0 0 26px; max-width: 19em; }
   .tags { font-family: var(--mono); font-size: 13px; color: var(--ink); margin: 0;
           border-top: 3px solid var(--ink); display: inline-block; padding-top: 12px;
           letter-spacing: .04em; }
@@ -204,7 +204,7 @@
     .hive-comb { --s: 178px; }
   }
   @media (max-width: 560px) {
-    h1 { font-size: clamp(22px, 8.4vw, 44px); }
+    h1 { font-size: clamp(18px, 6.6vw, 30px); }
     .logo { font-size: 14px; gap: 7px; }
     .logo svg { width: 21px; height: 21px; }
     .topnav { padding-left: 18px; }
@@ -303,7 +303,7 @@
   <div class="hero-inner wrap">
     <p class="eyebrow">yunusovt983-art.github.io</p>
     <h1>Архитектурные<br>атласы</h1>
-    <p class="sub">Искусство разбора программных систем</p>
+    <p class="sub">Искусство разбора программных систем — Микросервисы!</p>
     <p class="tags">HLD в ANSI · DDD-карты · секвенции · инварианты · хроники</p>
   </div>
   <span class="scroll-hint">↓ листайте — атласы и соты ниже</span>
@@ -461,36 +461,45 @@
     });
   });
 
-  /* город: генерация зданий (подошва x, y, ширина, глубина, высота k) */
+  /* город: 3D-дома в виде сот (подошва x, y, размер s, высота k) */
   var NS = 'http://www.w3.org/2000/svg';
+  var HR = 0.92; /* высота шестиугольника относительно его ширины */
   var blocks = [
-    [300, 25, 150, 95, 1.0], [520, -15, 110, 120, 0.6], [760, 30, 150, 90, 1.3], [1160, 15, 150, 95, 0.9],
-    [737, 248, 120, 92, 1.2], [893, 228, 122, 100, 2.3], [737, 372, 140, 80, 0.7], [906, 368, 112, 84, 1.4],
-    [1150, 255, 150, 105, 1.0], [1320, 400, 120, 90, 1.2], [1180, 600, 160, 105, 0.8],
-    [40, 790, 180, 80, 0.7], [430, 660, 150, 95, 0.9], [720, 575, 150, 100, 1.6], [960, 600, 140, 95, 0.8]
+    [300, 30, 150, 1.0], [520, 5, 110, 0.6], [760, 35, 150, 1.3], [1160, 20, 150, 0.9],
+    [737, 250, 120, 1.2], [893, 232, 122, 2.3], [737, 372, 140, 0.7], [906, 368, 112, 1.4],
+    [1150, 258, 150, 1.0], [1320, 400, 120, 1.2], [1180, 600, 160, 0.8],
+    [40, 790, 180, 0.7], [430, 662, 150, 0.9], [720, 578, 150, 1.6], [960, 602, 140, 0.8]
   ];
-  blocks.sort(function (a, b) { return (a[1] + a[3]) - (b[1] + b[3]); });
+  blocks.sort(function (a, b) { return (a[1] + a[2] * HR) - (b[1] + b[2] * HR); });
   var gB = document.getElementById('city-b');
   var gS = document.getElementById('city-sh');
-  function poly(pts, fill) {
+  function poly(pts, fill, group, stroke) {
     var p = document.createElementNS(NS, 'polygon');
     p.setAttribute('points', pts.map(function (q) { return q[0] + ',' + q[1]; }).join(' '));
     p.setAttribute('fill', fill);
-    p.setAttribute('stroke', '#1C1206');
-    p.setAttribute('stroke-width', '2');
-    p.setAttribute('stroke-linejoin', 'round');
-    gB.appendChild(p);
+    if (stroke) {
+      p.setAttribute('stroke', '#1C1206');
+      p.setAttribute('stroke-width', '2');
+      p.setAttribute('stroke-linejoin', 'round');
+    }
+    (group || gB).appendChild(p);
+  }
+  function hexPts(x, y, s, dx, dy) {
+    var h = s * HR;
+    var v = [
+      [x + s / 2, y], [x + s, y + h * 0.25], [x + s, y + h * 0.75],
+      [x + s / 2, y + h], [x, y + h * 0.75], [x, y + h * 0.25]
+    ];
+    if (dx) v = v.map(function (p) { return [p[0] + dx, p[1] + dy]; });
+    return v;
   }
   blocks.forEach(function (b) {
-    var x = b[0], y = b[1], w = b[2], h = b[3], ex = 16 * b[4], ey = -22 * b[4];
-    var sh = document.createElementNS(NS, 'rect');
-    sh.setAttribute('x', x - 12); sh.setAttribute('y', y + 10);
-    sh.setAttribute('width', w); sh.setAttribute('height', h);
-    sh.setAttribute('rx', 6); sh.setAttribute('fill', 'rgba(28,18,6,.10)');
-    gS.appendChild(sh);
-    poly([[x, y], [x + ex, y + ey], [x + ex, y + h + ey], [x, y + h]], '#D8A72E');
-    poly([[x, y + h], [x + ex, y + h + ey], [x + w + ex, y + h + ey], [x + w, y + h]], '#EDC94F');
-    poly([[x + ex, y + ey], [x + w + ex, y + ey], [x + w + ex, y + h + ey], [x + ex, y + h + ey]], '#FFF8DF');
+    var x = b[0], y = b[1], s = b[2], ex = 16 * b[3], ey = -22 * b[3];
+    poly(hexPts(x - 10, y + 9, s), 'rgba(28,18,6,.10)', gS);
+    var base = hexPts(x, y, s), roof = hexPts(x, y, s, ex, ey);
+    poly([base[4], roof[4], roof[3], base[3]], '#D8A72E', gB, true);
+    poly([base[3], roof[3], roof[2], base[2]], '#EDC94F', gB, true);
+    poly(roof, '#FFF8DF', gB, true);
   });
 
   /* prefers-reduced-motion: машины паркуются */
