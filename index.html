@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Архитектурные атласы — Temur Yunusov</title>
+<meta name="description" content="Коллекция архитектурных разборов: HLD, DDD, ANSI-схемы и диаграммы последовательности для открытых и собственных проектов.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
+<style>
+  :root {
+    --bg: #F1F4F7; --surface: #FFFFFF; --ink: #1B2733; --muted: #5C6E7E;
+    --line: #C6D2DD; --accent: #D9480F; --flow: #0B7285;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --serif: Charter, "Iowan Old Style", Georgia, serif;
+    --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #101820; --surface: #17222D; --ink: #E2EAF1; --muted: #8DA2B4;
+            --line: #2C3D4D; --accent: #FF8A3D; --flow: #45C0D4; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font-family: var(--serif); font-size: 17px; line-height: 1.6; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .14em;
+             text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: var(--sans); font-weight: 700; font-size: clamp(30px, 5vw, 46px);
+       line-height: 1.08; margin: 0 0 14px; letter-spacing: -.015em; text-wrap: balance; }
+  .lede { font-size: 18px; max-width: 60ch; color: var(--ink); margin: 0 0 8px;
+          padding-bottom: 28px; border-bottom: 2px solid var(--ink); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+          gap: 14px; margin-top: 36px; }
+  a.card { display: block; background: var(--surface); border: 1px solid var(--line);
+           border-radius: 6px; padding: 18px 20px; text-decoration: none; color: var(--ink); }
+  a.card:hover { border-color: var(--accent); }
+  a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .card .name { font-family: var(--mono); font-size: 13px; font-weight: 600;
+                color: var(--flow); margin-bottom: 8px; }
+  a.card:hover .name { color: var(--accent); }
+  .card .desc { font-size: 15px; line-height: 1.55; color: var(--muted); }
+  footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
+           font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  footer a { color: var(--flow); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">yunusovt983-art.github.io</p>
+  <h1>Архитектурные атласы</h1>
+  <p class="lede">Разборы систем — чужих и своих: HLD-схемы (SVG и ANSI), DDD-карты, диаграммы последовательности, инварианты и хроники. Каждый атлас — самодостаточная страница.</p>
+
+  <div class="grid">
+    <a class="card" href="/superpowers/">
+      <div class="name">superpowers/</div>
+      <div class="desc">Архитектурный атлас obra/superpowers — методология для AI-агентов: HLD, активация, SDD, fix loop, DDD-карта, секвенции и wiki-заметки.</div>
+    </a>
+    <a class="card" href="/hermes/">
+      <div class="name">hermes/</div>
+      <div class="desc">Hermes-RS — High-Level Design порта агента Hermes на Rust: ports &amp; adapters, ANSI-схемы, инварианты и хроника эпиков.</div>
+    </a>
+    <a class="card" href="/git-diff/">
+      <div class="name">git-diff/</div>
+      <div class="desc">Форж — GitHub-подобная платформа поверх собственной реализации git на Rust: HLD, 29 крейтов, семь схем в ANSI, границы контекстов.</div>
+    </a>
+    <a class="card" href="/forge-site/">
+      <div class="name">forge-site/</div>
+      <div class="desc">Forge — прогресс, архитектура и метрики git-платформы на Rust.</div>
+    </a>
+    <a class="card" href="/entity-diff/">
+      <div class="name">entity-diff/</div>
+      <div class="desc">SDP (Semantic Diff Protocol) — HLD в ANSI: слои, арки, граф понятий.</div>
+    </a>
+    <a class="card" href="/git-diff-interconnect/">
+      <div class="name">git-diff-interconnect/</div>
+      <div class="desc">Циклон — git как высокоскоростной harness для AI-агентов: пять ограниченных контекстов поверх Interconnect по образцу YDB.</div>
+    </a>
+    <a class="card" href="/nebraska/">
+      <div class="name">nebraska/</div>
+      <div class="desc">Nebraska (Flatcar update manager) — архитектурное исследование в терминах DDD: контексты, ядро раскатки и две гипотезы, подтверждённые на стенде.</div>
+    </a>
+    <a class="card" href="/flatcar/">
+      <div class="name">flatcar/</div>
+      <div class="desc">Flatcar Container Linux — заметки и разбор.</div>
+    </a>
+  </div>
+
+  <footer>
+    Temur Yunusov · <a href="https://github.com/yunusovt983-art">github.com/yunusovt983-art</a>
+  </footer>
+</div>
+</body>
+</html>
