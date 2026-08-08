@@ -16,6 +16,8 @@
     --ink: #1C1206;
     --ink-soft: #4A3A10;
     --cream: #FFF7DC;
+    --steel: #2E353D;
+    --menu-bg: #12151B;
     --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     --display: "Futura", "Avenir Next Condensed", "Avenir Next", "Arial Narrow", "Helvetica Neue", sans-serif;
     --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
@@ -31,12 +33,82 @@
     background-size: 84px 147px, cover;
     background-attachment: fixed, fixed;
   }
+  body.menu-open { overflow: hidden; }
   .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
 
+  /* ─── Навигация (по мотивам pilot.auto) ─── */
+  .topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+            display: flex; align-items: center; gap: 28px;
+            padding: 14px 76px 14px 28px;
+            background: rgba(255, 212, 28, .78);
+            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(28, 18, 6, .12); }
+  .logo { display: flex; align-items: center; gap: 9px; text-decoration: none;
+          color: var(--ink); font-family: var(--display); font-weight: 800;
+          font-size: 17px; letter-spacing: .04em; white-space: nowrap; }
+  .logo svg { display: block; }
+  .logo .dot { color: var(--red); }
+  .nav-links { display: flex; align-items: center; gap: 22px; margin-left: auto; }
+  .nav-links a { font-family: var(--mono); font-size: 12.5px; font-weight: 700;
+                 letter-spacing: .08em; text-transform: uppercase;
+                 color: var(--ink); text-decoration: none; }
+  .nav-links a:hover { color: var(--red); }
+  .nav-links .ext { font-size: 11px; }
+
+  .burger { position: fixed; top: 10px; right: 20px; z-index: 1001;
+            width: 46px; height: 46px; border-radius: 50%;
+            background: var(--ink); border: 0; cursor: pointer;
+            display: grid; place-items: center;
+            box-shadow: 0 4px 14px rgba(28,18,6,.35); }
+  .burger:hover { background: var(--red); }
+  .burger span, .burger span::before, .burger span::after {
+    content: ""; display: block; width: 18px; height: 2px;
+    background: var(--honey); position: relative; transition: transform .25s, opacity .25s; }
+  .burger span::before { position: absolute; top: -6px; }
+  .burger span::after  { position: absolute; top:  6px; }
+  body.menu-open .burger span { transform: rotate(45deg); }
+  body.menu-open .burger span::before { transform: rotate(-90deg); top: 0; }
+  body.menu-open .burger span::after  { opacity: 0; }
+
+  /* ─── Полноэкранное меню ─── */
+  .menu { position: fixed; inset: 0; z-index: 950; background: var(--menu-bg);
+          color: #E8ECF2; transform: translateY(-102%); transition: transform .45s cubic-bezier(.7,0,.2,1);
+          overflow-y: auto; }
+  body.menu-open .menu { transform: translateY(0); }
+  .menu-inner { padding-top: 96px; padding-bottom: 48px; min-height: 100%;
+                display: flex; flex-direction: column; }
+  .m-item { display: block; text-decoration: none; color: #E8ECF2; }
+  .m-home { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 4.6vw, 44px);
+            color: var(--honey); margin-bottom: 10px; }
+  .m-home::before { content: "· "; color: #5C6B7A; }
+  .m-big { font-family: var(--display); font-weight: 800;
+           font-size: clamp(34px, 6.4vw, 62px); line-height: 1.06; margin: 14px 0 4px; }
+  .m-big:hover, .m-home:hover, .m-small:hover { color: var(--honey-hi); }
+  .m-cap { display: block; font-family: var(--mono); font-size: 11px; font-weight: 400;
+           letter-spacing: .1em; text-transform: uppercase; color: #7C8896; margin-top: 8px; }
+  .m-small { font-family: var(--sans); font-weight: 600; font-size: 17px; margin: 20px 0 0; }
+  .m-small:first-of-type { margin-top: 34px; }
+  .menu-foot { margin-top: auto; padding-top: 56px; display: flex; flex-wrap: wrap;
+               gap: 18px; font-family: var(--mono); font-size: 11px; color: #5C6B7A; }
+  .menu-foot a { color: #7C8896; text-decoration: none; }
+  .menu-foot a:hover { color: var(--honey); }
+
+  /* ─── Плавающая CTA + scroll-хинт ─── */
+  .cta-pill { position: fixed; right: 22px; bottom: 22px; z-index: 800;
+              display: inline-flex; align-items: center; gap: 8px;
+              background: var(--ink); color: var(--cream); text-decoration: none;
+              font-family: var(--mono); font-size: 13px; font-weight: 700;
+              letter-spacing: .05em; padding: 13px 20px; border-radius: 999px;
+              box-shadow: 0 6px 18px rgba(28,18,6,.4); transition: background .15s, transform .15s; }
+  .cta-pill:hover { background: var(--red); transform: translateY(-2px); }
+  .scroll-hint { position: absolute; left: 28px; bottom: 22px; z-index: 2;
+                 font-family: var(--mono); font-size: 12px; letter-spacing: .08em;
+                 color: var(--ink); }
+
   /* ─── Hero (обложка) ─── */
-  .hero { position: relative; overflow: hidden; min-height: clamp(520px, 74vh, 780px);
+  .hero { position: relative; overflow: hidden; min-height: clamp(560px, 78vh, 800px);
           display: flex; align-items: center; }
-  .hero-inner { position: relative; z-index: 2; padding-top: 72px; padding-bottom: 72px; }
+  .hero-inner { position: relative; z-index: 2; padding-top: 120px; padding-bottom: 84px; }
   .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .18em;
              text-transform: uppercase; color: var(--ink-soft); margin: 0 0 22px; }
   h1 { font-family: var(--display); font-weight: 800; text-transform: uppercase;
@@ -49,13 +121,13 @@
           border-top: 3px solid var(--ink); display: inline-block; padding-top: 12px;
           letter-spacing: .04em; }
 
-  /* ─── Пчёлы ─── */
+  /* ─── Робо-пчёлы ─── */
   .bees { position: absolute; inset: 0; z-index: 1; pointer-events: none;
           perspective: 1000px; transform-style: preserve-3d; }
   .bee { position: absolute; width: 140px; height: 100px; margin: -50px 0 0 -70px;
          transform-style: preserve-3d; will-change: transform; }
   .b3d { position: relative; width: 140px; height: 100px; transform-style: preserve-3d;
-         filter: drop-shadow(0 22px 14px rgba(28,18,6,.20)); }
+         filter: drop-shadow(0 22px 14px rgba(28,18,6,.22)); }
   .bee svg.body { position: absolute; inset: 0; overflow: visible; }
   .wing { position: absolute; width: 56px; height: 84px; transform-origin: 50% 96%; }
   .wing svg { width: 100%; height: 100%; overflow: visible; }
@@ -70,8 +142,15 @@
     .wl, .wr { animation: none; transform: rotateX(35deg); }
   }
 
-  /* ─── Квадратики ─── */
+  /* ─── Секции ─── */
   main { position: relative; z-index: 2; padding-bottom: 24px; }
+  section { scroll-margin-top: 90px; }
+  h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase;
+       font-size: clamp(24px, 3.8vw, 40px); letter-spacing: .04em; color: var(--ink);
+       margin: 0 0 22px; }
+  h2 .h2-red { color: var(--red); }
+
+  /* ─── Квадратики ─── */
   .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
   a.card { position: relative; aspect-ratio: 1 / 1; display: flex; flex-direction: column;
            background: var(--cream); border: 3px solid var(--ink); border-radius: 4px;
@@ -93,21 +172,36 @@
                text-transform: uppercase; color: var(--ink); }
   a.card:hover .cta { color: var(--red); }
 
-  /* ─── Остальные атласы ─── */
-  .rest { padding: 40px 0 8px; }
-  .rest h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase;
-             font-size: clamp(22px, 3.4vw, 34px); letter-spacing: .04em; color: var(--ink);
-             margin: 0 0 18px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-  a.chip { font-family: var(--mono); font-size: 13px; font-weight: 600;
-           background: var(--cream); color: var(--ink); text-decoration: none;
-           border: 2px solid var(--ink); border-radius: 4px; padding: 7px 12px;
-           box-shadow: 4px 4px 0 rgba(28,18,6,.75); transition: transform .12s, box-shadow .12s; }
-  a.chip:hover, a.chip:focus-visible { transform: translate(-2px, -2px);
-           box-shadow: 6px 6px 0 var(--red); color: var(--red); outline: none; }
+  /* ─── Соты ─── */
+  .hive-sec { padding: 56px 0 8px; }
+  .hive { display: flex; }
+  .hive-comb { --s: 206px; --m: 5px;
+               --f: calc(var(--s) * 1.732 + 4 * var(--m) - 1px);
+               font-size: 0; width: 100%; padding-bottom: calc(var(--s) * 0.30); }
+  .hive-comb::before { content: ""; width: calc(var(--s) / 2 + var(--m));
+               float: left; height: 120%;
+               shape-outside: repeating-linear-gradient(#0000 0 calc(var(--f) - 3px), #000 0 var(--f)); }
+  .hex { display: inline-block; vertical-align: top; font-size: initial;
+         width: var(--s); height: calc(var(--s) * 1.1547);
+         margin: var(--m); margin-bottom: calc(var(--m) - var(--s) * 0.2885);
+         clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+         background: var(--ink); position: relative; text-decoration: none;
+         transition: background .15s; }
+  .hex-in { position: absolute; inset: 3px;
+            clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+            background: var(--cream); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 26% 15%; transition: background .15s; }
+  .hex:hover { background: var(--red); }
+  .hex:hover .hex-in { background: var(--honey-hi); }
+  .hex .name { font-family: var(--mono); font-weight: 700; font-size: 12.5px;
+               color: var(--red); word-break: break-word; margin-bottom: 7px; }
+  .hex .desc { font-size: 11.5px; line-height: 1.45; color: var(--ink-soft);
+               display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+               overflow: hidden; }
 
   /* ─── Автор + футер ─── */
-  .author { text-align: center; padding: 56px 24px 34px; }
+  .author { text-align: center; padding: 64px 24px 34px; scroll-margin-top: 90px; }
   .author .name { font-family: var(--display); font-weight: 800; text-transform: uppercase;
                   font-size: clamp(22px, 3.6vw, 36px); letter-spacing: .14em; color: var(--red-dark); }
   footer { background: var(--ink); color: #E9DCB4; font-family: var(--mono); font-size: 13px; }
@@ -115,13 +209,22 @@
                  gap: 16px; flex-wrap: wrap; padding-top: 18px; padding-bottom: 18px; }
   footer a { color: var(--honey); text-decoration: none; }
   footer a:hover { color: #FFFFFF; }
-  .hexmark { font-size: 16px; }
 
   @media (max-width: 880px) {
     .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .nav-links { display: none; }
+    .hive-comb { --s: 178px; }
   }
   @media (max-width: 560px) {
     h1 { font-size: clamp(22px, 8.4vw, 44px); }
+    .logo { font-size: 14px; gap: 7px; }
+    .logo svg { width: 21px; height: 21px; }
+    .topnav { padding-left: 18px; }
+    .hive-comb { --s: 152px; text-align: center; padding-bottom: 0; }
+    .hive-comb::before { display: none; }
+    .hex { margin-bottom: var(--m); }
+    .hex .desc { -webkit-line-clamp: 3; font-size: 10.5px; }
+    .cta-pill { padding: 11px 16px; font-size: 12px; }
   }
   @media (max-width: 520px) {
     .grid { grid-template-columns: 1fr; }
@@ -130,81 +233,164 @@
   }
 </style>
 </head>
-<body>
+<body id="top">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <clipPath id="abclip"><ellipse cx="92" cy="54" rx="38" ry="22"/></clipPath>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#CBD4DC"/>
+      <stop offset=".5" stop-color="#99A4AF"/>
+      <stop offset="1" stop-color="#6E7883"/>
+    </linearGradient>
+    <linearGradient id="metal2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#59636E"/>
+      <stop offset="1" stop-color="#2E353D"/>
+    </linearGradient>
+    <radialGradient id="lens" cx=".35" cy=".35" r=".8">
+      <stop offset="0" stop-color="#C4F6FF"/>
+      <stop offset=".45" stop-color="#39D2EE"/>
+      <stop offset="1" stop-color="#0A7C97"/>
+    </radialGradient>
+    <linearGradient id="jet" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFB300"/>
+      <stop offset="1" stop-color="#FFB300" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Робо-пчела (смотрит влево) -->
     <g id="bee-body">
-      <!-- лапки -->
-      <path d="M44 62 q-10 12 -22 15 M56 66 q-2 14 -12 20 M74 68 q4 13 -1 22 M96 72 q6 10 4 20"
-            fill="none" stroke="#1C1206" stroke-width="3.5" stroke-linecap="round"/>
-      <!-- брюшко -->
-      <ellipse cx="92" cy="54" rx="38" ry="22" fill="#F2A007"/>
-      <g clip-path="url(#abclip)" fill="#1C1206">
-        <rect x="70" y="24" width="11" height="60" transform="rotate(-6 75 54)"/>
-        <rect x="90" y="24" width="11" height="60" transform="rotate(-6 95 54)"/>
-        <rect x="110" y="20" width="26" height="68" transform="rotate(-6 118 54)"/>
-      </g>
-      <ellipse cx="92" cy="54" rx="38" ry="22" fill="none" stroke="#1C1206" stroke-width="3"/>
-      <!-- жало -->
-      <path d="M129 57 L140 60" stroke="#1C1206" stroke-width="3" stroke-linecap="round"/>
-      <!-- грудка -->
-      <ellipse cx="46" cy="50" rx="19" ry="16" fill="#2E1F0C" stroke="#1C1206" stroke-width="3"/>
-      <path d="M34 40 q12 -8 24 0 M32 46 q14 -7 28 0" stroke="#5A431C" stroke-width="2"
-            fill="none" stroke-linecap="round"/>
-      <!-- голова -->
-      <circle cx="21" cy="47" r="12" fill="#1C1206"/>
-      <circle cx="16" cy="43" r="3.6" fill="#C9A44C"/>
-      <!-- усики -->
-      <path d="M14 38 C10 28, 2 24, -3 26 M22 36 C22 25, 30 19, 36 17"
-            fill="none" stroke="#1C1206" stroke-width="2.6" stroke-linecap="round"/>
+      <!-- лапки-манипуляторы -->
+      <path d="M46 66 L38 76 L26 80 M58 68 L54 80 L44 86 M76 70 L78 82 L72 90 M98 70 L104 80 L102 88"
+            fill="none" stroke="#2E353D" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="38" cy="76" r="2.2" fill="#FFB300"/>
+      <circle cx="54" cy="80" r="2.2" fill="#FFB300"/>
+      <circle cx="78" cy="82" r="2.2" fill="#FFB300"/>
+      <circle cx="104" cy="80" r="2.2" fill="#FFB300"/>
+      <!-- сопло и выхлоп -->
+      <polygon points="128,46 138,42 138,66 128,62" fill="#2E353D"/>
+      <polygon points="138,45 156,54 138,63" fill="url(#jet)" opacity=".85">
+        <animate attributeName="opacity" values=".85;.3;.85" dur="1.1s" repeatCount="indefinite"/>
+      </polygon>
+      <!-- корпус-капсула -->
+      <rect x="56" y="34" width="74" height="40" rx="20" fill="url(#metal)" stroke="#2E353D" stroke-width="2.5"/>
+      <!-- панельные швы -->
+      <path d="M78 35 V73 M96 35 V73 M112 36 V72" stroke="rgba(46,53,61,.55)" stroke-width="2"/>
+      <!-- LED-полосы -->
+      <rect x="82" y="38" width="10" height="32" rx="3" fill="#FFB300">
+        <animate attributeName="opacity" values="1;.45;1" dur="1.6s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="100" y="38" width="9" height="32" rx="3" fill="#FFB300">
+        <animate attributeName="opacity" values=".45;1;.45" dur="1.6s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="84.5" y="42" width="5" height="14" rx="2.5" fill="#FFD34D"/>
+      <rect x="102" y="42" width="4.5" height="14" rx="2" fill="#FFD34D"/>
+      <!-- заклёпки -->
+      <circle cx="66" cy="40" r="1.6" fill="#2E353D"/>
+      <circle cx="66" cy="68" r="1.6" fill="#2E353D"/>
+      <circle cx="122" cy="42" r="1.6" fill="#2E353D"/>
+      <circle cx="122" cy="66" r="1.6" fill="#2E353D"/>
+      <!-- грудной блок -->
+      <rect x="30" y="37" width="34" height="32" rx="9" fill="url(#metal2)" stroke="#1C2126" stroke-width="2.5"/>
+      <path d="M47 46 l6.9 4 v8 l-6.9 4 l-6.9 -4 v-8 Z" fill="#FFB300" stroke="#1C2126" stroke-width="1.8"/>
+      <!-- голова-сенсор -->
+      <circle cx="21" cy="50" r="13" fill="url(#metal2)" stroke="#1C2126" stroke-width="2.5"/>
+      <circle cx="17" cy="48" r="7" fill="url(#lens)"/>
+      <circle cx="14.5" cy="45.5" r="2" fill="#FFFFFF" opacity=".85"/>
+      <!-- антенны-сенсоры -->
+      <path d="M14 38 L10 28 L2 23 M24 37 L26 25 L34 19"
+            fill="none" stroke="#2E353D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="2" cy="23" r="2.6" fill="#39D2EE">
+        <animate attributeName="opacity" values="1;.35;1" dur="1.3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="34" cy="19" r="2.6" fill="#39D2EE">
+        <animate attributeName="opacity" values=".35;1;.35" dur="1.3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Крыло-ротор -->
+    <g id="bee-wing">
+      <polygon points="28,82 10,62 8,28 18,8 40,10 46,34 42,64"
+               fill="rgba(190,230,255,.42)" stroke="#3A4550" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M28 78 L20 16 M28 78 L38 16 M28 78 L11 46 M28 78 L44 40"
+            fill="none" stroke="rgba(58,69,80,.45)" stroke-width="2"/>
     </g>
   </defs>
 </svg>
+
+<nav class="topnav">
+  <a class="logo" href="#top" aria-label="Архитектурные атласы — на главную">
+    <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1.5 L23 7.25 V18.75 L13 24.5 L3 18.75 V7.25 Z" fill="none" stroke="#1C1206" stroke-width="2.4"/><circle cx="13" cy="13" r="3.4" fill="#D6001C"/></svg>
+    Архитектурные<span class="dot">.</span>Атласы
+  </a>
+  <div class="nav-links">
+    <a href="#atlases">Атласы</a>
+    <a href="#hive">Соты</a>
+    <a href="#author">Автор</a>
+    <a href="https://github.com/yunusovt983-art" target="_blank" rel="noopener">GitHub <span class="ext">↗</span></a>
+  </div>
+</nav>
+<button class="burger" id="burger" aria-label="Меню" aria-expanded="false"><span></span></button>
+
+<div class="menu" id="menu">
+  <nav class="menu-inner wrap">
+    <a class="m-item m-home" href="#top">Главная</a>
+    <a class="m-item m-big" href="#atlases">Избранные атласы
+      <span class="m-cap">git-diff-interconnect · entity-diff · git-diff · Harmonic · kan · kan-pytorch</span>
+    </a>
+    <a class="m-item m-big" href="#hive">Соты
+      <span class="m-cap">ещё пятнадцать атласов — от superpowers до gonka</span>
+    </a>
+    <a class="m-item m-small" href="https://github.com/yunusovt983-art" target="_blank" rel="noopener">GitHub ↗</a>
+    <a class="m-item m-small" href="#author">Автор</a>
+    <div class="menu-foot">
+      <span>Темур Юнусов</span>
+      <a href="https://github.com/yunusovt983-art/yunusovt983-art.github.io" target="_blank" rel="noopener">исходник страницы ↗</a>
+      <span>HLD · DDD · ANSI</span>
+    </div>
+  </nav>
+</div>
 
 <header class="hero">
   <div class="bees" id="bees" aria-hidden="true">
     <div class="bee" data-s="1.15" data-spd=".7"  style="left:74%; top:46%">
       <div class="b3d">
         <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
-        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
-        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
       </div>
     </div>
     <div class="bee" data-s=".62" data-spd="1"   style="left:48%; top:26%">
       <div class="b3d">
         <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
-        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
-        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
       </div>
     </div>
     <div class="bee" data-s=".48" data-spd="1.3" style="left:28%; top:64%">
       <div class="b3d">
         <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
-        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
-        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
       </div>
     </div>
     <div class="bee" data-s=".4"  data-spd="1.1" style="left:62%; top:74%">
       <div class="b3d">
         <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
-        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
-        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
       </div>
     </div>
     <div class="bee" data-s=".56" data-spd=".9"  style="left:86%; top:22%">
       <div class="b3d">
         <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
-        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
-        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
       </div>
     </div>
     <div class="bee" data-s=".34" data-spd="1.5" style="left:14%; top:26%">
       <div class="b3d">
         <svg class="body" viewBox="0 0 140 100"><use href="#bee-body"/></svg>
-        <div class="wing wl"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
-        <div class="wing wr"><svg viewBox="0 0 56 84"><path d="M28 82 C8 66 4 34 12 16 C20 -2 44 2 46 28 C48 52 42 70 28 82 Z" fill="rgba(255,252,240,.78)" stroke="#1C1206" stroke-width="2.5"/><path d="M28 78 C22 56 20 36 24 18 M28 78 C34 60 36 40 34 22" fill="none" stroke="rgba(28,18,6,.3)" stroke-width="2"/></svg></div>
+        <div class="wing wl"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
+        <div class="wing wr"><svg viewBox="0 0 56 84"><use href="#bee-wing"/></svg></div>
       </div>
     </div>
   </div>
@@ -215,85 +401,143 @@
     <p class="sub">Искусство разбора программных систем</p>
     <p class="tags">HLD в ANSI · DDD-карты · секвенции · инварианты · хроники</p>
   </div>
+  <span class="scroll-hint">↓ листайте — атласы и соты ниже</span>
 </header>
 
 <main class="wrap">
-  <div class="grid">
-    <a class="card" href="/git-diff-interconnect/">
-      <span class="num">01</span>
-      <span class="name">git-diff-interconnect/</span>
-      <span class="desc">Циклон — git как высокоскоростной harness для AI-агентов: пять ограниченных контекстов поверх Interconnect по образцу YDB.</span>
-      <span class="cta">открыть атлас →</span>
-    </a>
-    <a class="card" href="/entity-diff/">
-      <span class="num">02</span>
-      <span class="name">entity-diff/</span>
-      <span class="desc">SDP (Semantic Diff Protocol) — HLD в ANSI: слои, арки, граф понятий.</span>
-      <span class="cta">открыть атлас →</span>
-    </a>
-    <a class="card" href="/git-diff/">
-      <span class="num">03</span>
-      <span class="name">git-diff/</span>
-      <span class="desc">Форж — GitHub-подобная платформа поверх собственной реализации git на Rust: HLD, 29 крейтов, семь схем в ANSI, границы контекстов.</span>
-      <span class="cta">открыть атлас →</span>
-    </a>
-    <a class="card" href="/Harmonic/">
-      <span class="num">04</span>
-      <span class="name">Harmonic/</span>
-      <span class="desc">Rust-порт иерархической SSM на candle: три таймскейла и ошибка предсказания вместо attention, пять requirements-first спецификаций, шесть схем C4 L2 в ANSI.</span>
-      <span class="cta">открыть атлас →</span>
-    </a>
-    <a class="card" href="/kan/">
-      <span class="num">05</span>
-      <span class="name">kan/</span>
-      <span class="desc">Сети Колмогорова–Арнольда на чистом Rust по DDD: обучается функция на ребре, а не вес. Пять семейств базиса, батарея Фейнмана, хроника 41 арки.</span>
-      <span class="cta">открыть атлас →</span>
-    </a>
-    <a class="card" href="/kan-pytorch-site/">
-      <span class="num">06</span>
-      <span class="name">kan-pytorch/</span>
-      <span class="desc">KAN на Rust с нуля: обучаемый сплайн на каждом ребре, автоград, Canonical Graph IR за ACL, 12 крейтов и библиотека классических алгоритмов.</span>
-      <span class="cta">открыть атлас →</span>
-    </a>
-  </div>
+  <section id="atlases">
+    <h2>Избранные <span class="h2-red">атласы</span></h2>
+    <div class="grid">
+      <a class="card" href="/git-diff-interconnect/">
+        <span class="num">01</span>
+        <span class="name">git-diff-interconnect/</span>
+        <span class="desc">Циклон — git как высокоскоростной harness для AI-агентов: пять ограниченных контекстов поверх Interconnect по образцу YDB.</span>
+        <span class="cta">открыть атлас →</span>
+      </a>
+      <a class="card" href="/entity-diff/">
+        <span class="num">02</span>
+        <span class="name">entity-diff/</span>
+        <span class="desc">SDP (Semantic Diff Protocol) — HLD в ANSI: слои, арки, граф понятий.</span>
+        <span class="cta">открыть атлас →</span>
+      </a>
+      <a class="card" href="/git-diff/">
+        <span class="num">03</span>
+        <span class="name">git-diff/</span>
+        <span class="desc">Форж — GitHub-подобная платформа поверх собственной реализации git на Rust: HLD, 29 крейтов, семь схем в ANSI, границы контекстов.</span>
+        <span class="cta">открыть атлас →</span>
+      </a>
+      <a class="card" href="/Harmonic/">
+        <span class="num">04</span>
+        <span class="name">Harmonic/</span>
+        <span class="desc">Rust-порт иерархической SSM на candle: три таймскейла и ошибка предсказания вместо attention, пять requirements-first спецификаций, шесть схем C4 L2 в ANSI.</span>
+        <span class="cta">открыть атлас →</span>
+      </a>
+      <a class="card" href="/kan/">
+        <span class="num">05</span>
+        <span class="name">kan/</span>
+        <span class="desc">Сети Колмогорова–Арнольда на чистом Rust по DDD: обучается функция на ребре, а не вес. Пять семейств базиса, батарея Фейнмана, хроника 41 арки.</span>
+        <span class="cta">открыть атлас →</span>
+      </a>
+      <a class="card" href="/kan-pytorch-site/">
+        <span class="num">06</span>
+        <span class="name">kan-pytorch/</span>
+        <span class="desc">KAN на Rust с нуля: обучаемый сплайн на каждом ребре, автоград, Canonical Graph IR за ACL, 12 крейтов и библиотека классических алгоритмов.</span>
+        <span class="cta">открыть атлас →</span>
+      </a>
+    </div>
+  </section>
 
-  <section class="rest">
-    <h2>Остальные атласы</h2>
-    <div class="chips">
-      <a class="chip" href="/superpowers/" title="Методология для AI-агентов: HLD, активация, SDD, fix loop, DDD-карта, wiki">superpowers/</a>
-      <a class="chip" href="/hermes/" title="Hermes-RS — HLD порта агента Hermes на Rust: ports & adapters, инварианты, хроника эпиков">hermes/</a>
-      <a class="chip" href="/forge-site/" title="Forge — прогресс, архитектура и метрики git-платформы на Rust">forge-site/</a>
-      <a class="chip" href="/nebraska/" title="Nebraska (Flatcar update manager) — DDD-исследование: контексты, ядро раскатки, две гипотезы">nebraska/</a>
-      <a class="chip" href="/flatcar/" title="Flatcar Container Linux — заметки и разбор">flatcar/</a>
-      <a class="chip" href="/ai-google-ads/" title="ads-ai — AI-система управления Google Ads и Meta Ads на Rust: approve-гейт, undo, MCC">ai-google-ads/</a>
-      <a class="chip" href="/3x-ui/" title="3x-ui-panel — control-plane для Xray на Rust: DDD-гексагон из 5 крейтов, HLD в ANSI">3x-ui/</a>
-      <a class="chip" href="/zed/hld/" title="TurboHarness — идеи из Zed, переосмысленные с нуля: DDD-карта, HLD в ANSI, 28 крейтов">zed/hld/</a>
-      <a class="chip" href="/spintronics/" title="Библиотека спиновой динамики на Rust: HLD в ANSI, model drift, физическая верификация">spintronics/</a>
-      <a class="chip" href="/ai-reviewer-gonka/" title="Ревью как задача оркестрации: семистадийный конвейер, воронка фильтрации, 30 заметок">ai-reviewer-gonka/</a>
-      <a class="chip" href="/ainl/" title="AINL — граф-канонический AI-native рантайм на Rust: 7 крейтов, петля самопочинки">ainl/</a>
-      <a class="chip" href="/clippy/" title="archlint — компилятор-плагин на rustc_private: правило возвращает факт для графа знаний">clippy/</a>
-      <a class="chip" href="/KleinRiemannNetwork/" title="Комплекснозначная сеть с обучаемыми рёбрами на Rust: вирлингер-backprop, хроника 413 арок">KleinRiemannNetwork/</a>
-      <a class="chip" href="/codex-herd/" title="DDD-разбор терминального мультиплексора для AI-агентов: семь контекстов, две ACL">codex-herd/</a>
-      <a class="chip" href="/gonka/" title="Децентрализованный AI-инференс на форке Cosmos SDK: право голоса даёт работа GPU">gonka/</a>
+  <section id="hive" class="hive-sec">
+    <h2>Соты — <span class="h2-red">остальные атласы</span></h2>
+    <div class="hive">
+      <div class="hive-comb">
+        <a class="hex" href="/superpowers/">
+          <span class="hex-in"><span class="name">superpowers/</span><span class="desc">Методология для AI-агентов: активация, SDD, fix loop, DDD-карта и wiki.</span></span>
+        </a>
+        <a class="hex" href="/hermes/">
+          <span class="hex-in"><span class="name">hermes/</span><span class="desc">Порт агента Hermes на Rust: ports &amp; adapters, инварианты, хроника эпиков.</span></span>
+        </a>
+        <a class="hex" href="/forge-site/">
+          <span class="hex-in"><span class="name">forge-site/</span><span class="desc">Прогресс, архитектура и метрики git-платформы на Rust.</span></span>
+        </a>
+        <a class="hex" href="/nebraska/">
+          <span class="hex-in"><span class="name">nebraska/</span><span class="desc">Flatcar update manager в терминах DDD: контексты и ядро раскатки.</span></span>
+        </a>
+        <a class="hex" href="/flatcar/">
+          <span class="hex-in"><span class="name">flatcar/</span><span class="desc">Flatcar Container Linux — заметки и архитектурный разбор.</span></span>
+        </a>
+        <a class="hex" href="/ai-google-ads/">
+          <span class="hex-in"><span class="name">ai-google-ads/</span><span class="desc">AI-управление Google Ads на Rust: approve-гейт, undo, MCC.</span></span>
+        </a>
+        <a class="hex" href="/3x-ui/">
+          <span class="hex-in"><span class="name">3x-ui/</span><span class="desc">Control-plane для Xray на Rust: DDD-гексагон из пяти крейтов.</span></span>
+        </a>
+        <a class="hex" href="/zed/hld/">
+          <span class="hex-in"><span class="name">zed/hld/</span><span class="desc">TurboHarness: 28 крейтов — идеи из Zed, переосмысленные с нуля.</span></span>
+        </a>
+        <a class="hex" href="/spintronics/">
+          <span class="hex-in"><span class="name">spintronics/</span><span class="desc">Спиновая динамика на Rust: model drift и физическая верификация.</span></span>
+        </a>
+        <a class="hex" href="/ai-reviewer-gonka/">
+          <span class="hex-in"><span class="name">ai-reviewer-gonka/</span><span class="desc">Ревью как оркестрация: семистадийный конвейер, воронка стоимости.</span></span>
+        </a>
+        <a class="hex" href="/ainl/">
+          <span class="hex-in"><span class="name">ainl/</span><span class="desc">AI-native рантайм на Rust: 7 крейтов и петля самопочинки.</span></span>
+        </a>
+        <a class="hex" href="/clippy/">
+          <span class="hex-in"><span class="name">clippy/</span><span class="desc">archlint: правило возвращает факт для графа знаний, 9 крейтов DDD.</span></span>
+        </a>
+        <a class="hex" href="/KleinRiemannNetwork/">
+          <span class="hex-in"><span class="name">KleinRiemann…/</span><span class="desc">Комплекснозначная сеть на Rust: вирлингер-backprop, 413 арок.</span></span>
+        </a>
+        <a class="hex" href="/codex-herd/">
+          <span class="hex-in"><span class="name">codex-herd/</span><span class="desc">Мультиплексор для AI-агентов: семь контекстов, две ACL.</span></span>
+        </a>
+        <a class="hex" href="/gonka/">
+          <span class="hex-in"><span class="name">gonka/</span><span class="desc">Децентрализованный AI-инференс: право голоса даёт работа GPU.</span></span>
+        </a>
+      </div>
     </div>
   </section>
 </main>
 
-<div class="author">
+<div class="author" id="author">
   <div class="name">Темур Юнусов</div>
 </div>
 
 <footer>
   <div class="wrap">
-    <span><span class="hexmark">⬡</span> архитектурные атласы</span>
+    <span>⬡ архитектурные атласы</span>
     <a href="https://github.com/yunusovt983-art">github.com/yunusovt983-art</a>
   </div>
 </footer>
 
+<a class="cta-pill" href="https://github.com/yunusovt983-art" target="_blank" rel="noopener">GitHub <span>↗</span></a>
+
 <script>
 (function () {
-  var hero = document.querySelector('.hero');
+  /* меню */
+  var burger = document.getElementById('burger');
+  var menu = document.getElementById('menu');
+  burger.addEventListener('click', function () {
+    var open = document.body.classList.toggle('menu-open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  [].forEach.call(menu.querySelectorAll('a'), function (a) {
+    a.addEventListener('click', function () {
+      document.body.classList.remove('menu-open');
+      burger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* робо-пчёлы */
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vf = 1;
+  function calcVf() {
+    vf = innerWidth < 640 ? 0.55 : (innerWidth < 900 ? 0.75 : 1);
+  }
+  calcVf();
+  addEventListener('resize', calcVf);
   var bees = [].slice.call(document.querySelectorAll('.bee')).map(function (el, i) {
     var spd = parseFloat(el.dataset.spd || 1);
     return {
@@ -308,7 +552,7 @@
 
   if (reduce) {
     bees.forEach(function (b) {
-      b.el.style.transform = 'rotateY(' + (b.p1 % 2 ? 180 : 0) + 'deg) scale(' + b.s + ')';
+      b.el.style.transform = 'rotateY(' + (b.p1 % 2 ? 180 : 0) + 'deg) scale(' + (b.s * vf) + ')';
     });
     return;
   }
@@ -326,7 +570,7 @@
       b.face += (target - b.face) * 0.08;
       var bank = Math.max(-22, Math.min(22, dy * 7)) * (b.face > 90 ? -1 : 1);
       b.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + z.toFixed(1) + 'px)' +
-        ' rotateY(' + b.face.toFixed(1) + 'deg) rotateZ(' + bank.toFixed(1) + 'deg) scale(' + b.s + ')';
+        ' rotateY(' + b.face.toFixed(1) + 'deg) rotateZ(' + bank.toFixed(1) + 'deg) scale(' + (b.s * vf).toFixed(2) + ')';
     }
     requestAnimationFrame(frame);
   }
