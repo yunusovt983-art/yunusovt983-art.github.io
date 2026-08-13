@@ -166,6 +166,7 @@
   .harness-sec { padding: 56px 0 8px; }
   .atlases-sec { padding: 56px 0 8px; }
   .models-sec { padding: 40px 0 8px; }
+  .hive-groups { display: flex; flex-direction: column; gap: 34px; }
   .hive { display: flex; }
   .hive-comb { --s: 206px; --m: 5px;
                --f: calc(var(--s) * 1.732 + 4 * var(--m) - 1px);
@@ -191,6 +192,15 @@
   .hex .desc { font-size: 11.5px; line-height: 1.45; color: var(--ink-soft);
                display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
                overflow: hidden; }
+
+  /* ─── Соты «скоро» — репозиторий ещё не создан, ссылка не ведёт никуда ─── */
+  .hex.soon { cursor: default; }
+  .hex.soon:hover { background: var(--ink); }
+  .hex.soon .hex-in, .hex.soon:hover .hex-in { background: rgba(255, 247, 220, .6); }
+  .hex.soon .name { color: var(--ink-soft); }
+  .hex.soon .desc { opacity: .8; }
+  .hex.soon .soon-tag { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px;
+                         letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
 
   /* ─── Футер ─── */
   footer { background: var(--ink); color: #E9DCB4; font-family: var(--mono); font-size: 13px; }
@@ -251,7 +261,7 @@
       <span class="m-cap">ainl · clippy · codex-herd · hermes · ai-reviewer-gonka · storm · zed/hld · superpowers</span>
     </a>
     <a class="m-item m-big" href="#hive">Инфраструктура
-      <span class="m-cap">ещё восемь атласов — от forge-site до tetragon</span>
+      <span class="m-cap">3 соты по 3 — flatcar, tetragon, nebraska · trusted-ai + скоро</span>
     </a>
     <a class="m-item m-small" href="https://github.com/yunusovt983-art" target="_blank" rel="noopener">GitHub ↗</a>
     <div class="menu-foot">
@@ -549,33 +559,46 @@
   </section>
 
   <section id="hive" class="hive-sec">
-    <h2>Инфраструктура — <span class="h2-red">Immutable Architecture</span></h2>
-    <div class="hive">
-      <div class="hive-comb">
-        <a class="hex" href="/forge-site/">
-          <span class="hex-in"><span class="name">forge-site/</span><span class="desc">Прогресс, архитектура и метрики git-платформы на Rust.</span></span>
-        </a>
-        <a class="hex" href="/nebraska/">
-          <span class="hex-in"><span class="name">nebraska/</span><span class="desc">Flatcar update manager в терминах DDD: контексты и ядро раскатки.</span></span>
-        </a>
-        <a class="hex" href="/flatcar/">
-          <span class="hex-in"><span class="name">flatcar/</span><span class="desc">Flatcar Container Linux — заметки и архитектурный разбор.</span></span>
-        </a>
-        <a class="hex" href="/trusted-ai/">
-          <span class="hex-in"><span class="name">trusted-ai/</span><span class="desc">Trusted AI Foundation: пирамида доверия Immutable → Trusted AI, петля «AI предлагает — ядро исполняет», три недостающих звена.</span></span>
-        </a>
-        <a class="hex" href="/ai-google-ads/">
-          <span class="hex-in"><span class="name">ai-google-ads/</span><span class="desc">AI-управление Google Ads на Rust: approve-гейт, undo, MCC.</span></span>
-        </a>
-        <a class="hex" href="/3x-ui/">
-          <span class="hex-in"><span class="name">3x-ui/</span><span class="desc">Control-plane для Xray на Rust: DDD-гексагон из пяти крейтов.</span></span>
-        </a>
-        <a class="hex" href="/mongodb-vector/">
-          <span class="hex-in"><span class="name">mongodb-vector/</span><span class="desc">second-brain: семантическая память на MongoDB $vectorSearch + свой RDMA/RoCE-интерконнект по образцу YDB.</span></span>
-        </a>
-        <a class="hex" href="/tetragon/">
-          <span class="hex-in"><span class="name">tetragon/</span><span class="desc">Cilium eBPF security observability для Kubernetes: DDD-разбор внешнего проекта методом «2 мозга», побайтовый формат BPF-байткода.</span></span>
-        </a>
+    <h2>Инфраструктура<br><span class="h2-red">Immutable Architecture для AI</span></h2>
+    <div class="hive-groups">
+      <div class="hive">
+        <div class="hive-comb">
+          <a class="hex" href="/flatcar/">
+            <span class="hex-in"><span class="name">flatcar/</span><span class="desc">Flatcar Container Linux — заметки и архитектурный разбор.</span></span>
+          </a>
+          <a class="hex" href="/tetragon/">
+            <span class="hex-in"><span class="name">tetragon/</span><span class="desc">Cilium eBPF security observability для Kubernetes: DDD-разбор внешнего проекта методом «2 мозга», побайтовый формат BPF-байткода.</span></span>
+          </a>
+          <a class="hex" href="/nebraska/">
+            <span class="hex-in"><span class="name">nebraska/</span><span class="desc">Flatcar update manager в терминах DDD: контексты и ядро раскатки.</span></span>
+          </a>
+        </div>
+      </div>
+      <div class="hive">
+        <div class="hive-comb">
+          <a class="hex" href="/trusted-ai/">
+            <span class="hex-in"><span class="name">trusted-ai/</span><span class="desc">Trusted AI Foundation: пирамида доверия Immutable → Trusted AI, петля «AI предлагает — ядро исполняет».</span></span>
+          </a>
+          <span class="hex soon">
+            <span class="hex-in"><span class="name">pixie/</span><span class="desc">eBPF-observability для Kubernetes без инструментирования кода — авто-телеметрия трафика и syscall'ов.<span class="soon-tag">скоро</span></span></span>
+          </span>
+          <span class="hex soon">
+            <span class="hex-in"><span class="name">argo-cd/</span><span class="desc">GitOps continuous delivery для Kubernetes: git как источник истины для состояния кластера.<span class="soon-tag">скоро</span></span></span>
+          </span>
+        </div>
+      </div>
+      <div class="hive">
+        <div class="hive-comb">
+          <span class="hex soon">
+            <span class="hex-in"><span class="name">SOC/</span><span class="desc">Тема разбора уточняется.<span class="soon-tag">скоро</span></span></span>
+          </span>
+          <span class="hex soon">
+            <span class="hex-in"><span class="name">BottleRocket/</span><span class="desc">Bottlerocket (AWS) — контейнер-ориентированная Linux-ОС, минимальный образ и atomic-обновления.<span class="soon-tag">скоро</span></span></span>
+          </span>
+          <span class="hex soon">
+            <span class="hex-in"><span class="name">TwoLitter/</span><span class="desc">Тема разбора уточняется.<span class="soon-tag">скоро</span></span></span>
+          </span>
+        </div>
       </div>
     </div>
   </section>
